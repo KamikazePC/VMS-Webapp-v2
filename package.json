@@ -1,5 +1,5 @@
 {
-  "name": "vms-web-app-v2",
+  "name": "vms-webapp-v2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@payloadcms/db-postgres": "3.0.0-beta.108",
+    "@payloadcms/next": "3.0.0-beta.108",
+    "@payloadcms/plugin-cloud": "3.0.0-beta.108",
+    "@payloadcms/richtext-lexical": "3.0.0-beta.108",
+    "graphql": "^16.9.0",
     "next": "15.0.0-canary.149",
+    "payload": "3.0.0-beta.108",
     "react": "19.0.0-rc-06d0b89e-20240801",
     "react-dom": "19.0.0-rc-06d0b89e-20240801"
   },
