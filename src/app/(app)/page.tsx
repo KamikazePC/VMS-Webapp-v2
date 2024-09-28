@@ -1,17 +1,18 @@
+'use client'
 import { Estate_Managers, existingEstateCodes } from "@/lib/codeCheck";
-
+import { useRouter } from "next/navigation";
 
 export default async function Home() {
-const RegistrationCodes = await existingEstateCodes('2D1111')
-console.log("RegistrationCodes.docs:", RegistrationCodes.docs)
 
+  const Router = useRouter()
 
-const EstateMangaers= await Estate_Managers()
-console.log("EstateMangaers:", EstateMangaers)
 
 
   return (
-    <div>
+    <div className="flex justify-center mt-[400px]">
+    <button onClick={() => Router.push('/admin')} className=" bg-white text-black rounded-md hover:scale-105 p-2 font-bold text-lg">
+      Login
+    </button>
     </div>
   );
 }
