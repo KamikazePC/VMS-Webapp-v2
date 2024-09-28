@@ -3,6 +3,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Residents: CollectionConfig = {
   slug: 'residents',
+  admin: {
+    useAsTitle: 'Resident Name',
+  },
   fields: [
     {
       name: 'Resident Name',
