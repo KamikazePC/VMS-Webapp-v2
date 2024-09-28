@@ -73,11 +73,12 @@ export interface Estate {
   id: number;
   'Estate Name': string;
   'Editor Email': string;
-  registrationCode: string;
+  registrationCode?: string | null;
   registrationCodeGeneratedAt?: string | null;
   'Monthly Rate': number;
   'Onboarding Cost': number;
   'Subscription Duration': number;
+  'Subscription Status': boolean;
   updatedAt: string;
   createdAt: string;
 }

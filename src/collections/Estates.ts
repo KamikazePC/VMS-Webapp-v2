@@ -1,31 +1,40 @@
-import { isAdmin, isAdminOrSelf } from '@/access/access'
-import type { CollectionConfig } from 'payload'
-import { nanoid } from 'nanoid'
+import { isAdmin, isAdminOrSelf } from '@/access/access';
+import type { CollectionConfig, FieldHook } from 'payload';
+import { nanoid } from 'nanoid';
+import { Estate_Managers, existingEstateCodes } from "@/lib/codeCheck";
 
-const generateUniqueRegistrationCode = async (payload: any) => {
-  const code = nanoid(5) // Generates a 10-character unique code
-  
-  // Check if the code already exists
-  const existingEstate = await payload.find({
-    collection: 'estates',
-    where: {
-      registrationCode: code,
-    },
-  })
+// Generates a unique registration code and stores the creation date
+const generateUniqueRegistrationCode = async (): Promise<string> => {
+  const code = nanoid(5); // Generates a 5-character unique code
+  const existingEstate = await existingEstateCodes(code);
 
   // If the code already exists, generate a new one recursively
-  if (existingEstate.totalDocs > 0) {
-    return generateUniqueRegistrationCode(payload)
+  if (existingEstate.docs.length > 0) {
+    return generateUniqueRegistrationCode();
   }
 
-  return code
-}
+  // Return the new code
+  return code;
+};
 
-const isCodeExpired = (codeGeneratedAt: Date) => {
-  const twoWeeksInMs = 14 * 24 * 60 * 60 * 1000 // 14 days in milliseconds
-  const now = new Date()
-  return now.getTime() - codeGeneratedAt.getTime() > twoWeeksInMs
-}
+// Hook to check if the registration code has expired and regenerate if necessary
+const regenerateCodeIfExpired: FieldHook = async ({ value, data, originalDoc }) => {
+  const now = new Date();
+  const twoWeeksInMs = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
+  const generatedAt = originalDoc?.registrationCodeGeneratedAt
+    ? new Date(originalDoc.registrationCodeGeneratedAt)
+    : now;
+
+  // If more than 14 days have passed since the code was generated, regenerate the code
+  if (now.getTime() - generatedAt.getTime() > twoWeeksInMs) {
+    const newCode = await generateUniqueRegistrationCode();
+    data!.registrationCodeGeneratedAt = now; // Update the generation date
+    return newCode; // Return the newly generated code
+  }
+
+  // If not expired, return the current code
+  return value;
+};
 
 export const Estates: CollectionConfig = {
   slug: 'estates',
@@ -42,16 +51,40 @@ export const Estates: CollectionConfig = {
       required: true,
     },
     {
-      name: 'Editor Email',
+      name: 'Estate Manager', // required
+      type: 'select', // required
+      hasMany: true,
+      admin: {
+        isClearable: true,
+        isSortable: true, // use mouse to drag and drop different values, and sort them according to your choice
+      },
+      options: [
+        
+        // ...(await Estate_Managers()).docs.map((user) => ({ label: user.firstName + ' ' + user.lastName, value: user.firstName + '_' + user.lastName })),
+      ],
+    },
+    {
+      name: 'Estate Manager Email',
       type: 'email',
       required: true,
     },
     {
       name: 'registrationCode',
       type: 'text',
-      required: true,
       admin: {
         readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ data }) => {
+            // Generate a unique registration code before validation
+            if (!data?.registrationCode) {
+              data!.registrationCode = await generateUniqueRegistrationCode();
+              data!.registrationCodeGeneratedAt = new Date(); // Set the generation date
+            }
+          },
+          regenerateCodeIfExpired, // Regenerate code if expired
+        ],
       },
     },
     {
@@ -81,21 +114,19 @@ export const Estates: CollectionConfig = {
       name: 'Subscription Duration',
       type: 'number',
       required: true,
+      defaultValue: 12,
+      min: 1,
+      max: 12,
       admin: {
         placeholder: '12',
       },
     },
+    {
+      name: 'Subscription Status',
+      type: 'checkbox',
+      label: 'Subscribed',
+      defaultValue: false,
+      required: true,
+    },
   ],
- hooks: {
-   beforeValidate: [
-     async ({ operation, data, req: { payload } }) => {
-       if (operation === 'create' || !data || !data.registrationCode || isCodeExpired(data.registrationCodeGeneratedAt)) {
-         data = data || {};
-         data.registrationCode = await generateUniqueRegistrationCode(payload);
-         data.registrationCodeGeneratedAt = new Date();
-       }
-       return data;
-     },
-   ],
- },
-}
+};

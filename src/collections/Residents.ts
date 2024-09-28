@@ -3,15 +3,6 @@ import type { CollectionConfig } from 'payload'
 
 export const Residents: CollectionConfig = {
   slug: 'residents',
-  access: {
-    // allow creation of users by admins by default
-    create: isEstateManager,
-    // Allow read and update access for admins or self in both environments
-    read: isEstateManager,
-    update: isEstateManager,
-    // Only admins can delete in both environments
-    delete: isEstateManager,
-  },
   fields: [
     {
       name: 'Resident Name',
