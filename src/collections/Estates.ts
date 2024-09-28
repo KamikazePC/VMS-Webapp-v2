@@ -36,6 +36,14 @@ const regenerateCodeIfExpired: FieldHook = async ({ value, data, originalDoc }) 
   return value;
 };
 
+
+const estateManagers = async () => {
+  const data = await Estate_Managers();
+  return data.map((item) => ({ label: item.label, value: item.value }));
+};
+
+
+
 export const Estates: CollectionConfig = {
   slug: 'estates',
   access: {
@@ -44,24 +52,33 @@ export const Estates: CollectionConfig = {
     update: isAdminOrSelf,
     delete: isAdmin,
   },
+  admin: {
+    useAsTitle: 'Estate Name',
+  },
   fields: [
     {
       name: 'Estate Name',
+      label: 'Estate_Name',
       type: 'text',
       required: true,
     },
     {
-      name: 'Estate Manager', // required
-      type: 'select', // required
-      hasMany: true,
+      name: 'Estate Managers',
+      label: 'Estate Managers',
+      type: 'relationship',
+      relationTo: 'users', // The 'users' collection
+      required: true,
+      hasMany: true, // Allows selecting multiple estate managers
       admin: {
-        isClearable: true,
-        isSortable: true, // use mouse to drag and drop different values, and sort them according to your choice
+        description: 'Select one or more estate managers',
+        //isClearable: true,
+        isSortable: true, // Enable drag and drop sorting for multiple selections
+        allowCreate: true,
       },
-      options: [
-        
-        // ...(await Estate_Managers()).docs.map((user) => ({ label: user.firstName + ' ' + user.lastName, value: user.firstName + '_' + user.lastName })),
-      ],
+      // Optional: Filter to only show estate managers in the relationship field
+      filterOptions: {
+        roles: { equals: 'estate_manager' },
+      },
     },
     {
       name: 'Estate Manager Email',

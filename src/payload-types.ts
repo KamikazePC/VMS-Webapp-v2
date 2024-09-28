@@ -54,6 +54,7 @@ export interface User {
   firstName: string;
   lastName: string;
   roles?: ('admin' | 'estate_manager')[] | null;
+  title?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -72,7 +73,8 @@ export interface User {
 export interface Estate {
   id: number;
   'Estate Name': string;
-  'Editor Email': string;
+  'Estate Managers': (number | User)[];
+  'Estate Manager Email': string;
   registrationCode?: string | null;
   registrationCodeGeneratedAt?: string | null;
   'Monthly Rate': number;

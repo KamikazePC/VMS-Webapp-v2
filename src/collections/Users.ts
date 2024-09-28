@@ -11,7 +11,7 @@ export const Users: CollectionConfig = {
     // Allow authentication based on email and password
   },
   admin: {
-    useAsTitle: 'email',
+    useAsTitle: 'title',
   },
   access: {
     // allow creation of users by admins by default
@@ -59,6 +59,42 @@ export const Users: CollectionConfig = {
         },
       ],
     },
+    {
+      name: 'title',
+      type: 'text',
+      hooks: {
+        beforeChange: [
+          ({ data }) => {
+            if (data?.firstName && data.lastName) {
+              data.title = `${data.firstName} ${data.lastName}`;
+            }
+          },
+        ],
+      },
+      admin: {
+        readOnly: true,
+      },
+    },
+
+    // {
+    //   name: 'Estate',
+    //   label: 'estate ',
+    //   type: 'relationship',
+    //   relationTo: 'estates', // The 'users' collection
+    //   //required: true,
+    //   hidden: true,
+    //   hasMany: false, // Allows selecting multiple estate managers
+    //   defaultValue: 'Estate Name',
+      
+    //   admin: {
+    //     description: 'Select related estate',
+    //     allowCreate: true,
+    //   },
+    //   // Optional: Filter to only show estate managers in the relationship field
+    //   filterOptions: {
+    //     Estate_Name: { equals: 'Estate Name' },
+    //   },
+    // },
     // Add any other necessary fields here...
   ],
 };
