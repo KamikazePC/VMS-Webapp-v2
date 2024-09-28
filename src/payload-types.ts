@@ -12,7 +12,8 @@ export interface Config {
   };
   collections: {
     users: User;
-    media: Media;
+    estates: Estate;
+    residents: Resident;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -50,6 +51,9 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  firstName: string;
+  lastName: string;
+  roles?: ('admin' | 'estate_manager')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -63,22 +67,35 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "estates".
  */
-export interface Media {
+export interface Estate {
   id: number;
-  alt: string;
+  'Estate Name': string;
+  'Editor Email': string;
+  registrationCode: string;
+  'Monthly Rate': number;
+  'Onboarding Cost': number;
+  'Subscription Duration': number;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residents".
+ */
+export interface Resident {
+  id: number;
+  'Resident Name': string;
+  'Resident Email': string;
+  Address: string;
+  'Phone Number': string;
+  'Time In'?: string | null;
+  'Time Out'?: string | null;
+  roles: 'resident' | 'security';
+  Estate: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -92,8 +109,12 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'estates';
+        value: number | Estate;
+      } | null)
+    | ({
+        relationTo: 'residents';
+        value: number | Resident;
       } | null);
   globalSlug?: string | null;
   user: {
