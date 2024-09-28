@@ -20,6 +20,7 @@
     "@payloadcms/plugin-cloud": "3.0.0-beta.108",
     "@payloadcms/richtext-lexical": "3.0.0-beta.108",
     "graphql": "^16.9.0",
+    "nanoid": "^5.0.7",
     "next": "15.0.0-canary.160",
     "payload": "3.0.0-beta.108",
     "react": "19.0.0-rc-5dcb0097-20240918",

@@ -74,6 +74,7 @@ export interface Estate {
   'Estate Name': string;
   'Editor Email': string;
   registrationCode: string;
+  registrationCodeGeneratedAt?: string | null;
   'Monthly Rate': number;
   'Onboarding Cost': number;
   'Subscription Duration': number;
