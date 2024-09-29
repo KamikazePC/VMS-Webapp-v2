@@ -86,6 +86,16 @@ export const Estates: CollectionConfig = {
       required: true,
     },
     {
+      name: 'Estate Address',
+      label: 'Estate_Address',
+      type: 'text',
+      required: true,
+      //defaultValue: 'No. 1, Street, City, Country',
+      admin: {
+        placeholder: 'No2. Falakalalana Street, Kampala, Uganda',
+      }
+    },
+    {
       name: 'registrationCode',
       type: 'text',
       admin: {

@@ -75,6 +75,7 @@ export interface Estate {
   'Estate Name': string;
   'Estate Managers': (number | User)[];
   'Estate Manager Email': string;
+  'Estate Address': string;
   registrationCode?: string | null;
   registrationCodeGeneratedAt?: string | null;
   'Monthly Rate': number;

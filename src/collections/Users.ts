@@ -43,6 +43,7 @@ export const Users: CollectionConfig = {
       type: 'select',
       hasMany: true,
       saveToJWT: true,
+      defaultValue: 'estate_manager',
       // defaultValue: isDevEnvironment ? ['admin'] : ['editor'], // Default to admin only in dev
       access: {
         create: isAdminFieldLevel,
