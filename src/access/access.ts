@@ -8,7 +8,7 @@ export const isAdmin: FieldAccess = ({req: {user}}) => {
 
 //check if current user is admin or self
 export const isAdminOrSelf: FieldAccess = ({req: {user}, id}) => {
-    return user?.roles?.includes('admin') || user?.id === id
+    return user?.roles?.includes('admin') || user?.roles?.includes('estate_manager') || user?.id === id
 }
 
 //field level access, ensuring only admin can create 

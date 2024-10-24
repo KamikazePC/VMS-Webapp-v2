@@ -14,6 +14,12 @@ export interface Config {
     users: User;
     estates: Estate;
     residents: Resident;
+    group_invites: GroupInvite;
+    individual_one_time_invites: IndividualOneTimeInvite;
+    individual_recurring_invites: IndividualRecurringInvite;
+    active_devices: ActiveDevice;
+    notifications: Notification;
+    security: Security;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -54,7 +60,7 @@ export interface User {
   firstName: string;
   lastName: string;
   roles?: ('admin' | 'estate_manager')[] | null;
-  title?: string | null;
+  username?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -73,15 +79,15 @@ export interface User {
 export interface Estate {
   id: number;
   'Estate Name': string;
-  'Estate Managers': (number | User)[];
-  'Estate Manager Email': string;
+  'Estate Managers'?: (number | User)[] | null;
+  'Estate Manager Email'?: string | null;
   'Estate Address': string;
   registrationCode?: string | null;
   registrationCodeGeneratedAt?: string | null;
   'Monthly Rate': number;
   'Onboarding Cost': number;
   'Subscription Duration': number;
-  'Subscription Status': boolean;
+  'Subscription Status'?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -90,15 +96,115 @@ export interface Estate {
  * via the `definition` "residents".
  */
 export interface Resident {
-  id: number;
-  'Resident Name': string;
-  'Resident Email': string;
-  Address: string;
-  'Phone Number': string;
-  'Time In'?: string | null;
-  'Time Out'?: string | null;
-  roles: 'resident' | 'security';
-  Estate: string;
+  id: string;
+  username?: string | null;
+  email?: string | null;
+  address?: string | null;
+  phone_number?: string | null;
+  estate_id?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "group_invites".
+ */
+export interface GroupInvite {
+  id: string;
+  resident_name?: string | null;
+  group_name?: string | null;
+  otp?: string | null;
+  status?: string | null;
+  address?: string | null;
+  start_date_time?: string | null;
+  end_date_time?: string | null;
+  entry_time?: string | null;
+  exit_time?: string | null;
+  members_checked_in?: string | null;
+  created_by?: string | null;
+  estate_id?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "individual_one_time_invites".
+ */
+export interface IndividualOneTimeInvite {
+  id: string;
+  resident_name?: string | null;
+  visitor_name?: string | null;
+  visitor_phone?: string | null;
+  otp?: string | null;
+  status?: string | null;
+  address?: string | null;
+  start_date_time?: string | null;
+  end_date_time?: string | null;
+  entry_time?: string | null;
+  exit_time?: string | null;
+  created_by?: string | null;
+  estate_id?: number | null;
+  is_recurring?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "individual_recurring_invites".
+ */
+export interface IndividualRecurringInvite {
+  id: string;
+  resident_name?: string | null;
+  visitor_name?: string | null;
+  visitor_phone?: string | null;
+  otp?: string | null;
+  status?: string | null;
+  address?: string | null;
+  start_date_time?: string | null;
+  end_date_time?: string | null;
+  entry_time?: string | null;
+  exit_time?: string | null;
+  created_by?: string | null;
+  estate_id?: number | null;
+  is_recurring?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "active_devices".
+ */
+export interface ActiveDevice {
+  id: string;
+  user_id?: string | null;
+  last_login?: string | null;
+  device_id?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications".
+ */
+export interface Notification {
+  id: string;
+  title?: string | null;
+  message?: string | null;
+  user_id?: string | null;
+  read?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security".
+ */
+export interface Security {
+  id: string;
+  security_name: string;
+  email: string;
+  password: string;
+  estate: number | Estate;
   updatedAt: string;
   createdAt: string;
 }
@@ -119,7 +225,31 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'residents';
-        value: number | Resident;
+        value: string | Resident;
+      } | null)
+    | ({
+        relationTo: 'group_invites';
+        value: string | GroupInvite;
+      } | null)
+    | ({
+        relationTo: 'individual_one_time_invites';
+        value: string | IndividualOneTimeInvite;
+      } | null)
+    | ({
+        relationTo: 'individual_recurring_invites';
+        value: string | IndividualRecurringInvite;
+      } | null)
+    | ({
+        relationTo: 'active_devices';
+        value: string | ActiveDevice;
+      } | null)
+    | ({
+        relationTo: 'notifications';
+        value: string | Notification;
+      } | null)
+    | ({
+        relationTo: 'security';
+        value: string | Security;
       } | null);
   globalSlug?: string | null;
   user: {

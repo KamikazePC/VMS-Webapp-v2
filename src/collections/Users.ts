@@ -11,7 +11,7 @@ export const Users: CollectionConfig = {
     // Allow authentication based on email and password
   },
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: 'username',
   },
   access: {
     // allow creation of users by admins by default
@@ -41,7 +41,7 @@ export const Users: CollectionConfig = {
     {
       name: 'roles',
       type: 'select',
-      hasMany: true,
+      hasMany: true, // Allows selecting multiple roles
       saveToJWT: true,
       defaultValue: 'estate_manager',
       // defaultValue: isDevEnvironment ? ['admin'] : ['editor'], // Default to admin only in dev
@@ -61,7 +61,7 @@ export const Users: CollectionConfig = {
       ],
     },
     {
-      name: 'title',
+      name: 'username',
       type: 'text',
       hooks: {
         beforeChange: [

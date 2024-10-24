@@ -4,66 +4,45 @@ import type { CollectionConfig } from 'payload'
 export const Residents: CollectionConfig = {
   slug: 'residents',
   admin: {
-    useAsTitle: 'Resident Name',
+    useAsTitle: 'username',
+  },
+  access: {
+    create: () => false,
+    update: () => false,
+    read: isAdminOrSelf,
+    delete: isEstateManager,
   },
   fields: [
     {
-      name: 'Resident Name',
+      name: 'id',
+      label: 'Resident ID',
+      unique: true,
       type: 'text',
-      required: true,
     },
     {
-      name: 'Resident Email',
+      name: 'username',
+      label: 'Resident Name',
+      type: 'text',
+    },
+    {
+      name: 'email',
+      label: 'Resident Email',
       type: 'email',
-      required: true,
     },
     {
-      name: 'Address',
+      name: 'address',
+      label: 'Address',
       type: 'text',
-      required: true,
     },
     {
-      name: 'Phone Number',
+      name: 'phone_number',
+      label: 'Phone Number',
       type: 'text',
-      required: true,
     },
     {
-      name: 'Time In',
-      type: 'date',
-      required: false,
-    },
-    {
-      name: 'Time Out',
-      type: 'date',
-      required: false,
-    },
-    {
-        name: 'roles',
-        type: 'select',
-        saveToJWT: true,
-        required: true,
-        options: [
-          {
-            label: 'Resident',
-            value: 'resident',
-          },
-          {
-            label: 'Security',
-            value: 'security',
-          },
-        ],
-      },
-    {
-      name: 'Estate',
+      name: 'estate_id',
+      label: 'Estate ID',
       type: 'text',
-      required: true,
-      admin: {
-          readOnly: true,
-          position: 'sidebar',
-      }
     },
-
-
-
   ],
 }

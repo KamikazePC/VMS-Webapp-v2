@@ -48,12 +48,9 @@ export const Estates: CollectionConfig = {
   slug: 'estates',
   access: {
     create: isAdmin,
-    read: isAdminOrSelf,
-    update: isAdminOrSelf,
+    read: isAdmin,
+    update: isAdmin,
     delete: isAdmin,
-  },
-  admin: {
-    useAsTitle: 'Estate Name',
   },
   fields: [
     {
@@ -67,7 +64,6 @@ export const Estates: CollectionConfig = {
       label: 'Estate Managers',
       type: 'relationship',
       relationTo: 'users', // The 'users' collection
-      required: true,
       hasMany: true, // Allows selecting multiple estate managers
       admin: {
         description: 'Select one or more estate managers',
@@ -83,7 +79,6 @@ export const Estates: CollectionConfig = {
     {
       name: 'Estate Manager Email',
       type: 'email',
-      required: true,
     },
     {
       name: 'Estate Address',
@@ -153,7 +148,6 @@ export const Estates: CollectionConfig = {
       type: 'checkbox',
       label: 'Subscribed',
       defaultValue: false,
-      required: true,
     },
   ],
 };

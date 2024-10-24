@@ -10,6 +10,13 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Estates } from './collections/Estates'
 import { Residents } from './collections/Residents'
+import { Group } from 'lucide-react'
+import { GroupInvites } from './collections/GroupInvites'
+import { IndividualOneTimeInvites } from './collections/IndividualOneTimeInvites'
+import { IndividualRecurringInvites } from './collections/IndividualRecurringInvites'
+import { ActiveDevices } from './collections/ActiveDevices'
+import { Notifications } from './collections/Notifications'
+import { Security } from './collections/Security'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,7 +28,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Estates, Residents],
+  collections: [Users, Estates, Residents, GroupInvites, IndividualOneTimeInvites, IndividualRecurringInvites,ActiveDevices, Notifications, Security],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
